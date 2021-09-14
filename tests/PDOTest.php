@@ -8,6 +8,13 @@ class PDOTest extends \PHPUnit\Framework\TestCase
     public function testSelectMany()
     {
         $this->assertNotNull(DB::selectMany("SELECT * FROM roles", []));
+        $this->assertEquals(DB::selectMany("SELECT * FROM roles", []),
+            [
+                ['id'=>'1','slug'=>'MEM','name'=>'Member'],
+                ['id'=>'2','slug'=>'MOD','name'=>'Moderator'],
+                ['id'=>'3','slug'=>'XXX','name'=>'Correcteur']
+            ]
+        );
     }
 
     public function testSelectOne()
@@ -17,12 +24,12 @@ class PDOTest extends \PHPUnit\Framework\TestCase
 
     public function testInsert()
     {
-        $this->assertIsInt(DB::insert("INSERT INTO roles(slug,name) VALUES (:slug, :name)", ["slug" => "XXX", "name" => "Slasher"]));
+        $this->assertNotEquals(DB::insert("INSERT INTO roles(slug,name) VALUES (:slug, :name)", ["slug" => "XXX", "name" => "Slasher"]),0);
     }
 
     public function testUpdate()
     {
-        $this->assertIsInt(DB::execute("UPDATE roles set name = :name WHERE slug = :slug", ["slug" => "XXX", "name" => "Correcteur"]));
+        $this->assertNotEquals(DB::execute("UPDATE roles set name = :name WHERE slug = :slug", ["slug" => "XXX", "name" => "Correcteur"]),0);
     }
 
 }
