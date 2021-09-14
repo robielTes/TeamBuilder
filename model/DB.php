@@ -5,7 +5,7 @@ class DB
     protected  $PDO;
     protected static $_instance = null;
 
-    public function __construct($file = '.././env.ini')
+    public function __construct($file = './env.ini')
     {
         $parse = parse_ini_file($file, true);
 
