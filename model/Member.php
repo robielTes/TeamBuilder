@@ -1,6 +1,7 @@
 <?php
 
 require 'Model.php';
+require 'model/DB.php';
 
 class Member extends Model
 {
@@ -9,43 +10,67 @@ class Member extends Model
     public $password;
     public $role_id;
 
-    static public function make(array $fields)
+    /**
+     * @param $id
+     * @param $name
+     * @param $password
+     * @param $role_id
+     */
+    public function __construct($id, $name, $password, $role_id)
     {
-        // TODO: Implement make() method.
+        $this->id = $id;
+        $this->name = $name;
+        $this->password = $password;
+        $this->role_id = $role_id;
+    }
+
+
+    static public function make(array $fields):Member
+    {
+        return new Role($fields['slug'],$fields['password'],$fields['role_id']);
     }
 
     public function create(): bool
     {
-        // TODO: Implement create() method.
+        if(isset($this->name )&& isset($this->password) && isset($this->role_id)){
+                $res = DB::insert('INSERT INTO members (name,passwprd,role_id) VALUES (:name,:password,:role_id )', ["name" => $this->name, "password" => $this->password,"role_id" =>$this->role_id]);
+                $this->id = $res;
+                return isset($this->id);
+        }
         return false;
     }
 
     static public function find($id)
     {
-        // TODO: Implement find() method.
+        return  $res = DB::selectOne("SELECT * FROM members where id = :id", ["id" => $id]);
     }
 
     static public function all(): array
     {
-        // TODO: Implement all() method.
-        return [];
+        return $res = DB::selectMany("SELECT * FROM members", []);
     }
 
     public function save(): bool
     {
-        // TODO: Implement save() method.
-        return false;
+        //!
+        return $res = DB::execute("UPDATE members set name = :name WHERE id = :id", ["id" => $this->id, "name" => $this->name]);
     }
 
     public function delete(): bool
     {
-        // TODO: Implement delete() method.
-        return false;
+        if(isset($this->name )|| isset($this->password) || isset($this->role_id) || isset($this->id)){
+            unset($this->name);
+            unset($this->password);
+            unset($this->role_id);
+            unset($this->id);
+
+        }
+        return true;
     }
 
     static public function destroy($id): bool
     {
-        // TODO: Implement destroy() method.
-        return false;
+        //!
+        return  $res = DB::execute(' DELETE FROM roles WHERE id :id', ["id" => $id]);
     }
 }

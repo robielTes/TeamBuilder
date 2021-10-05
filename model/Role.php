@@ -57,7 +57,7 @@ class Role extends Model
 
     public function delete(): bool
     {
-        if(isset($this->name )|| isset($this->slug) || ($this->id)){
+        if(isset($this->name )|| isset($this->slug) || isset($this->id)){
             unset($this->slug);
             unset($this->name);
             unset($this->id);
