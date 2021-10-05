@@ -1,10 +1,12 @@
 <?php
 
-require('model/DB.php');
 
-class PDOTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+require 'model/DB.php';
+
+class PDOTest extends TestCase
 {
-
     public function testSelectMany()
     {
         $this->assertNotNull(DB::selectMany("SELECT * FROM roles", []));
@@ -31,5 +33,4 @@ class PDOTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNotEquals(DB::execute("UPDATE roles set name = :name WHERE slug = :slug", ["slug" => "XXX", "name" => "Correcteur"]),0);
     }
-
 }

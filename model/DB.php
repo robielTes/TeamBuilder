@@ -1,61 +1,54 @@
 <?php
 
+
+require 'env.php';
+
 class DB
 {
-    protected  $PDO;
-    protected static $_instance = null;
 
-    public function __construct($file = './env.ini')
+    public static function connexion()
     {
-        $parse = parse_ini_file($file, true);
-
-        $servername = $parse['PDO_DSN'];
-        $username = $parse['PDO_USERNAME'];
-        $password = $parse['PDO_PASSWORD'];
-        $db = $parse['PDO_DB'];
-
-        $this->PDO = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
-    }
-
-    protected static function instance()
-    {
-        if(is_null(self::$_instance)){
-            $class = __CLASS__;
-            self::$_instance = new $class();
+        try{
+            echo "non";
+            $PDO = new PDO("mysql:host=".PDO_DSN.";dbname=".PDO_DB, PDO_USERNAME, PDO_PASSWORD);
         }
-        return self::$_instance;
+
+        catch(PDOException $e){
+            printf("Connection failed : %s\n", $e->getMessage());
+            exit();
+
+        }
+        return $PDO;
     }
 
 
-    public static function selectMany($query,$option)
+    public static function selectMany($query,$args): bool|array
     {
-        $sth =  self::instance()->PDO->prepare($query);
-        $sth->execute($option);
+        $pdo = self::connexion();
+        $sth = $pdo->prepare($query);
+        $sth->execute($args);
         return $sth->fetchAll();
     }
-
-    public static function selectOne($query,$option)
+    public static function selectOne($query,$args): bool|array
     {
-        $sth = self::instance()->PDO->prepare($query);
-        $sth->execute($option);
+        $pdo = self::connexion();
+        $sth = $pdo->prepare($query);
+        $sth->execute($args);
         return $sth->fetchAll();
     }
-
-    public static function insert($query,$option)
+    public static function insert($query,$args): int
     {
-        $sth = self::instance()->PDO->prepare($query);
-        $sth->execute($option);
-        $sth->fetchAll();
+        $pdo = self::connexion();
+        $sth = $pdo->prepare($query);
+        $sth->execute($args);
         return $sth->rowCount();
     }
-
-    public static function execute($query,$option)
+    public static function execute($query,$args): int
     {
-        $sth =  self::instance()->PDO->prepare($query);
-        $sth->execute($option);
-        $sth->fetchAll();
+        $pdo = self::connexion();
+        $sth = $pdo->prepare($query);
+        $sth->execute($args);
         return $sth->rowCount();
     }
-
 
 }
