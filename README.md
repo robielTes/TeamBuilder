@@ -3,7 +3,7 @@
 
 ## user storie
 
-### Auto-connexion 55min
+### Auto-connexion 
 
     DoD
         - Quand l’application démarre, je suis automatiquement connecté en tant qu’utilisateur 
@@ -14,14 +14,20 @@
     Verification
 
         - Faire la vue Homepage.php         => 5min => ok
-        - Faire class controller            => 20min
-        - Mettre a jour fichier de config   => 10min
-        - Mettre en place mécanisme login   => 15min
-        - Faire index.php                   => 10min
-        - Ecrire Readme                     => 5min
+        - Faire class controller            => 20min => ok
+        - Mettre a jour fichier de config   => 10min => ok
+        - Mettre en place mécanisme login   => 15min => ok
+        - Faire index.php                   => 10min => ok
+        - Ecrire Readme                     => 5min => ok
+
+     HowTo
+
+     - Pour être d'utilisateur Auth mets votre id de utilisateur de  base donné dans le fichie env.php.
+     - le fichie Authentiation.php cherche le donne de user on utilise le id de fiche env.php et passun fichie index.php
+     - le fichie index.php prends les donné et stockes dans le session et passera au Homepage
 
 
-### Liste de membre 45min
+### Liste de membre 
 
     DoD
         - Quand je suis connecté, j’ai un lien vers la page de liste des membres 

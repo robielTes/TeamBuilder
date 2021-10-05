@@ -9,7 +9,6 @@ class DB
     public static function connexion()
     {
         try{
-            echo "non";
             $PDO = new PDO("mysql:host=".PDO_DSN.";dbname=".PDO_DB, PDO_USERNAME, PDO_PASSWORD);
         }
 
@@ -34,7 +33,7 @@ class DB
         $pdo = self::connexion();
         $sth = $pdo->prepare($query);
         $sth->execute($args);
-        return $sth->fetchAll();
+        return $sth->fetch();
     }
     public static function insert($query,$args): int
     {

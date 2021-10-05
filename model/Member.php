@@ -16,9 +16,9 @@ class Member extends Model
      * @param $password
      * @param $role_id
      */
-    public function __construct($id, $name, $password, $role_id)
+    public function __construct( $name, $password, $role_id)
     {
-        $this->id = $id;
+
         $this->name = $name;
         $this->password = $password;
         $this->role_id = $role_id;
@@ -27,7 +27,7 @@ class Member extends Model
 
     static public function make(array $fields):Member
     {
-        return new Role($fields['slug'],$fields['password'],$fields['role_id']);
+        return new Member($fields['name'],$fields['password'],$fields['role_id']);
     }
 
     public function create(): bool
@@ -42,7 +42,7 @@ class Member extends Model
 
     static public function find($id)
     {
-        return  $res = DB::selectOne("SELECT * FROM members where id = :id", ["id" => $id]);
+        return  $res = self::make(DB::selectOne("SELECT * FROM members where id = :id", ["id" => $id]));
     }
 
     static public function all(): array
@@ -70,7 +70,6 @@ class Member extends Model
 
     static public function destroy($id): bool
     {
-        //!
         return  $res = DB::execute(' DELETE FROM roles WHERE id :id', ["id" => $id]);
     }
 }
