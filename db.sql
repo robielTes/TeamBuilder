@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `teambuilder`.`roles`
     PRIMARY KEY (`id`),
     UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
     UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb3;
 
@@ -52,11 +52,11 @@ CREATE TABLE IF NOT EXISTS `teambuilder`.`members`
     UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
     INDEX `fk_members_roles_idx` (`role_id` ASC) VISIBLE,
     CONSTRAINT `fk_members_roles`
-        FOREIGN KEY (`role_id`)
-            REFERENCES `teambuilder`.`roles` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-)
+    FOREIGN KEY (`role_id`)
+    REFERENCES `teambuilder`.`roles` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+    )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb3;
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `teambuilder`.`states`
     PRIMARY KEY (`id`),
     UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
     UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb3;
 
@@ -93,11 +93,11 @@ CREATE TABLE IF NOT EXISTS `teambuilder`.`teams`
     UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
     INDEX `fk_teams_states1_idx` (`state_id` ASC) VISIBLE,
     CONSTRAINT `fk_teams_states1`
-        FOREIGN KEY (`state_id`)
-            REFERENCES `teambuilder`.`states` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-)
+    FOREIGN KEY (`state_id`)
+    REFERENCES `teambuilder`.`states` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+    )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb3;
 
@@ -119,16 +119,16 @@ CREATE TABLE IF NOT EXISTS `teambuilder`.`team_member`
     INDEX `fk_team_member_members1_idx` (`member_id` ASC) VISIBLE,
     INDEX `fk_team_member_teams1_idx` (`team_id` ASC) VISIBLE,
     CONSTRAINT `fk_team_member_members1`
-        FOREIGN KEY (`member_id`)
-            REFERENCES `teambuilder`.`members` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION,
+    FOREIGN KEY (`member_id`)
+    REFERENCES `teambuilder`.`members` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
     CONSTRAINT `fk_team_member_teams1`
-        FOREIGN KEY (`team_id`)
-            REFERENCES `teambuilder`.`teams` (`id`)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-)
+    FOREIGN KEY (`team_id`)
+    REFERENCES `teambuilder`.`teams` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+    )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb3;
 

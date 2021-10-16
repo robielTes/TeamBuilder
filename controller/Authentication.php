@@ -1,7 +1,6 @@
 <?php
 
 require 'model/Member.php';
-require 'env.php';
 
 class Authentication
 {

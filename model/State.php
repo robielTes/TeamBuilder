@@ -2,47 +2,47 @@
 
 require_once 'model/DB.php';
 
-class Team
+class State
 {
 
     public $id;
+    public $slug;
     public $name;
-    public $state_id;
 
-    public function __construct($id = null, $name = null, $state_id = null)
+    public function __construct($id = null, $slug = null, $name = null)
     {
         $this->id = $id;
+        $this->slug = $slug;
         $this->name = $name;
-        $this->state_id = $state_id;
     }
 
-    static public function make($fields) :Team
+    static public function make($fields) :State
     {
         if (is_array($fields)){
-            $res = DB::selectMany("SELECT id FROM `teams` order by id desc limit 1", []);
-            return new Team($res[0]->id,$fields['name'], $fields['state_id']);
+            $res = DB::selectMany("SELECT id FROM `states` order by id desc limit 1", []);
+            return new State($res[0]->id,$fields['slug'], $fields['name']);
         }
-        return new Team($fields->id,$fields->name, $fields->state_id);
+        return new State($fields->id,$fields->slug, $fields->name);
     }
 
     public function create() :bool
     {
         try {
-            if (isset($this->name) && isset($this->state_id)) {
-                DB::insert('INSERT INTO `teams` (name,state_id) VALUES (:name,:state_id)',
-                    ["name" => $this->name, "state_id" => $this->state_id]);
+            if (isset($this->slug) && isset($this->name)) {
+                DB::insert('INSERT INTO `states` (slug,name) VALUES (:slug,:name)',
+                    ["slug" => $this->slug, "name" => $this->name]);
                 return true;
             }
         } catch (PDOException $e){
-            //echo $e->getMessage();
+             //echo $e->getMessage();
             return false;
         }
 
     }
 
-    static public function find($id): null|Team
+    static public function find($id): null|State
     {
-        $select = DB::selectOne("SELECT * FROM `teams` where id = :id", ["id" => $id]);
+        $select = DB::selectOne("SELECT * FROM `states` where id = :id", ["id" => $id]);
         if($select != null){
             return self::make($select);
         }
@@ -51,25 +51,25 @@ class Team
 
     static public function all():array
     {
-        return $res = DB::selectMany("SELECT * FROM `teams`", []);
+        return $res = DB::selectMany("SELECT * FROM `states`", []);
     }
 
     public function save():bool
     {
         try {
             if($this->id != null){
-                $sql = "UPDATE `teams` SET ";
+                $sql = "UPDATE `states` SET ";
+                if($this->slug != null){
+                    $sql .= " `slug` = :slug,";
+                }
                 if($this->name != null){
                     $sql .= " `name` = :name,";
-                }
-                if($this->state_id != null){
-                    $sql .= " `state_id` = :state_id,";
                 }
                 $sql = substr($sql,0,-1);
                 $sql .= " WHERE id = :id;";
 
                 $res = DB::execute( $sql,
-                    ["id" => $this->id, "name" => $this->name, "state_id" => $this->state_id]);
+                    ["id" => $this->id, "slug" => $this->slug, "name" => $this->name]);
                 return true;
             }
         } catch (\PDOException $e) {
@@ -86,7 +86,7 @@ class Team
     static public function destroy($id):bool
     {
         try {
-            DB::execute(' DELETE FROM `teams` WHERE id = :id', ["id" => $id]);
+            DB::execute(' DELETE FROM `states` WHERE id = :id', ["id" => $id]);
             return true;
         } catch (\PDOException $e) {
             //echo $e->getMessage();
