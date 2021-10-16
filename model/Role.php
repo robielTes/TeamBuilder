@@ -1,74 +1,96 @@
 <?php
 
-require 'Model.php';
-require 'DB.php';
+require_once 'model/DB.php';
 
-class Role extends Model
+class Role
 {
+
     public $id;
     public $slug;
     public $name;
 
-
-    public function __construct($id, $slug, $name)
+    public function __construct($id = null, $slug = null, $name = null)
     {
         $this->id = $id;
         $this->slug = $slug;
         $this->name = $name;
     }
 
-
-    static public function make(array $fields) :Role
+    static public function make($fields) :Role
     {
-        return new Role($fields['slug'],$fields['name']);
-    }
-
-    public function create(): bool
-    {
-        if(isset($this->name )&& isset($this->slug)){
-            try{
-                $res = DB::insert('INSERT INTO roles (slug,name) VALUES (:slug,:name )', ["slug" => $this->slug, "name" => $this->name]);
-                $this->id = $res;
-                return isset($this->id);
-            }
-
-            catch(PDOException $e){
-                printf("Connection failed : %s\n", $e->getMessage());
-                exit();
-            }
+        if (is_array($fields)){
+            $res = DB::selectMany("SELECT id FROM `roles` order by id desc limit 1", []);
+            return new Role($res[0]->id,$fields['slug'], $fields['name']);
         }
-        return false;
+        return new Role($fields->id,$fields->slug, $fields->name);
     }
 
-    static public function find($id)
+    public function create() :bool
     {
-        return  $res = DB::selectOne("SELECT * FROM roles where id = :id", ["id" => $id]);
-    }
-
-    static public function all(): array
-    {
-        return $res = DB::selectMany("SELECT * FROM roles", []);
-    }
-
-    public function save(): bool
-    {
-        return $res = DB::execute("UPDATE roles set name = :name WHERE id = :id", ["id" => $this->id, "name" => $this->name]);
-    }
-
-    public function delete(): bool
-    {
-        if(isset($this->name )|| isset($this->slug) || isset($this->id)){
-            unset($this->slug);
-            unset($this->name);
-            unset($this->id);
-
+        try {
+            if (isset($this->slug) && isset($this->name)) {
+                DB::insert('INSERT INTO `roles` (slug,name) VALUES (:slug,:name)',
+                    ["slug" => $this->slug, "name" => $this->name]);
+                return true;
+            }
+        } catch (PDOException $e){
+             //echo $e->getMessage();
+            return false;
         }
+
+    }
+
+    static public function find($id): null|Role
+    {
+        $select = DB::selectOne("SELECT * FROM `roles` where id = :id", ["id" => $id]);
+        if($select != null){
+            return self::make($select);
+        }
+        return null;
+    }
+
+    static public function all():array
+    {
+        return $res = DB::selectMany("SELECT * FROM `roles`", []);
+    }
+
+    public function save():bool
+    {
+        try {
+            if($this->id != null){
+                $sql = "UPDATE `roles` SET ";
+                if($this->slug != null){
+                    $sql .= " `slug` = :slug,";
+                }
+                if($this->name != null){
+                    $sql .= " `name` = :name,";
+                }
+                $sql = substr($sql,0,-1);
+                $sql .= " WHERE id = :id;";
+
+                $res = DB::execute( $sql,
+                    ["id" => $this->id, "slug" => $this->slug, "name" => $this->name]);
+                return true;
+            }
+        } catch (\PDOException $e) {
+            //echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete():bool
+    {
+        return self::destroy($this->id);
+    }
+
+    static public function destroy($id):bool
+    {
+        try {
+            DB::execute(' DELETE FROM `roles` WHERE id = :id', ["id" => $id]);
             return true;
-
-    }
-
-    static public function destroy($id): bool
-    {
-        return  $res = DB::execute(' DELETE FROM roles WHERE id :id', ["id" => $id]);
+        } catch (\PDOException $e) {
+            //echo $e->getMessage();
+            return false;
+        }
     }
 }

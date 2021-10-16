@@ -1,53 +1,74 @@
 <?php
 
-
-require 'env.php';
+require '.env.php';
 
 class DB
 {
 
-    public static function connexion()
+    public static function connexion(): null|PDO
     {
         try{
             $PDO = new PDO("mysql:host=".PDO_DSN.";dbname=".PDO_DB, PDO_USERNAME, PDO_PASSWORD);
+            return $PDO;
         }
-
         catch(PDOException $e){
-            printf("Connection failed : %s\n", $e->getMessage());
-            exit();
+            echo "Connection failed: " . $e->getMessage();
+            return null;
 
         }
-        return $PDO;
+
+    }
+
+    private static function queryHander($query, $args)
+    {
+        $pdo = self::connexion();
+        if($pdo != null) {
+            $sth = $pdo->prepare($query);
+            $sth->execute($args);
+            return $sth;
+        }
+        return null;
     }
 
 
-    public static function selectMany($query,$args): bool|array
+    public static function selectMany(String $query, array $args) :null|array
     {
-        $pdo = self::connexion();
-        $sth = $pdo->prepare($query);
-        $sth->execute($args);
-        return $sth->fetchAll();
+        $sth = DB::queryHander($query,$args);
+        if($sth != null){
+            $row = $sth->fetchAll(PDO::FETCH_OBJ);
+            return $row;
+        }
+        return null;
+
     }
-    public static function selectOne($query,$args): bool|array
+    public static function selectOne( string $query, array $args)
     {
-        $pdo = self::connexion();
-        $sth = $pdo->prepare($query);
-        $sth->execute($args);
-        return $sth->fetch();
+
+        $sth = DB::queryHander($query,$args);
+        if($sth != null){
+            $row = $sth->fetchObject();
+            return $row;
+        }
+        return null;
+
     }
-    public static function insert($query,$args): int
+    public static function insert(string $query, array $args) : null|int
     {
-        $pdo = self::connexion();
-        $sth = $pdo->prepare($query);
-        $sth->execute($args);
-        return $sth->rowCount();
+        $sth = DB::queryHander($query,$args);
+        if($sth != null){
+            return $sth->rowCount();
+        }
+        return null;
     }
-    public static function execute($query,$args): int
+    public static function execute(string $query, array $args) : null|int
     {
-        $pdo = self::connexion();
-        $sth = $pdo->prepare($query);
-        $sth->execute($args);
-        return $sth->rowCount();
+        $sth = DB::queryHander($query,$args);
+        if($sth != null){
+            return $sth->rowCount();
+        }
+        return null;
+
+
     }
 
 }
