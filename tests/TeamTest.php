@@ -1,6 +1,6 @@
 <?php
 
-require "model/Team.php";
+require_once "model/Team.php";
 
 use PHPUnit\Framework\TestCase;
 

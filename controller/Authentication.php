@@ -1,6 +1,6 @@
 <?php
 
-require 'model/Member.php';
+require_once 'model/Member.php';
 
 class Authentication
 {
@@ -19,9 +19,5 @@ class Authentication
     {
         return $this->user;
     }
-
-
-
-
 
 }

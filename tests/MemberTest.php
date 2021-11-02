@@ -1,6 +1,6 @@
 <?php
 
-require "model/Member.php";
+require_once "model/Member.php";
 
 use PHPUnit\Framework\TestCase;
 

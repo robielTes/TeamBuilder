@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/DB.php';
+require_once 'model/Team.php';
 
 class Member
 {
@@ -60,7 +61,8 @@ class Member
 
     static public function all():array
     {
-        return $res = DB::selectMany("SELECT * FROM `members`", []);
+       return $res = DB::selectMany("SELECT * FROM `members`", []);
+
     }
 
     public function save():bool
@@ -110,8 +112,11 @@ class Member
 
     public function teams()
     {
+        return $res = DB::selectMany("SELECT `teams`.* FROM `members`
+                                     INNER JOIN `team_member` ON `team_member`.member_id = `members`.id 
+                                     INNER JOIN `teams` ON `teams`.id = team_member.team_id
+                                     WHERE `members`.id = :id ", ["id" => $this->id]);
 
     }
-
 
 }

@@ -3,7 +3,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-require 'model/DB.php';
+require_once 'model/DB.php';
 
 class PDOTest extends TestCase
 {

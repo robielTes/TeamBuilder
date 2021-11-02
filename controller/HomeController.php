@@ -1,15 +1,11 @@
 <?php
+require_once 'model/Member.php';
 
 class HomeController
 {
-    public function auth()
+    public function index()
     {
         require_once 'view/Homepage.php';
     }
-    public function membre()
-    {
-        require_once 'view/MemberList.php';
-    }
-
 
 }

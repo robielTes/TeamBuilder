@@ -1,6 +1,6 @@
 <?php
 
-require "model/Role.php";
+require_once "model/Role.php";
 
 use PHPUnit\Framework\TestCase;
 

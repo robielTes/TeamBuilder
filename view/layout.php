@@ -1,7 +1,3 @@
-<?php
-session_start();
-
-?>
 <!doctype html>
 <html lang="fr">
 <head>
@@ -17,6 +13,8 @@ session_start();
     <h1>TeamBuilder</h1>
     <p class="user"><?=$_SESSION['user']->name?></p>
 </header>
+<br><a class="btn btn-primary" href="?controller=listMember">MemberList</a>
+<br>
 <?= $content ?>
 
 
