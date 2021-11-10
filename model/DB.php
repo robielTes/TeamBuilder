@@ -7,11 +7,9 @@ class DB
 
     public static function connexion(): null|PDO
     {
-        try{
-            $PDO = new PDO("mysql:host=".PDO_DSN.";dbname=".PDO_DB, PDO_USERNAME, PDO_PASSWORD);
-            return $PDO;
-        }
-        catch(PDOException $e){
+        try {
+            return new PDO("mysql:host=" . PDO_DSN . ";dbname=" . PDO_DB, PDO_USERNAME, PDO_PASSWORD);
+        } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
             return null;
 
@@ -19,10 +17,10 @@ class DB
 
     }
 
-    private static function queryHander($query, $args)
+    private static function queryHandler($query, $args): bool|PDOStatement|null
     {
         $pdo = self::connexion();
-        if($pdo != null) {
+        if ($pdo != null) {
             $sth = $pdo->prepare($query);
             $sth->execute($args);
             return $sth;
@@ -31,44 +29,63 @@ class DB
     }
 
 
-    public static function selectMany(String $query, array $args) :null|array
+    public static function selectMany(string $query, array $args, $class = null): bool|array|null
     {
-        $sth = DB::queryHander($query,$args);
-        if($sth != null){
-            $row = $sth->fetchAll(PDO::FETCH_OBJ);
-            return $row;
+        $sth = DB::queryHandler($query, $args);
+
+        if ($sth !== null) {
+            try {
+                if ($class !== null) {
+                    $row = $sth->fetchAll(PDO::FETCH_CLASS, $class);
+                } else {
+                    $row = $sth->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return $row;
+            } catch (PDOException $e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public static function selectOne(string $query, array $args, $class = null)
+    {
+
+        $sth = DB::queryHandler($query, $args);
+        if ($sth !== null) {
+            try {
+                if ($class !== null) {
+                    $row = $sth->fetchObject($class);
+                } else {
+                    $row = $sth->fetch(PDO::FETCH_ASSOC);
+                }
+                return $row !== false ? $row : null;
+            } catch (PDOException $e) {
+                return null;
+            }
         }
         return null;
 
     }
-    public static function selectOne( string $query, array $args)
-    {
 
-        $sth = DB::queryHander($query,$args);
-        if($sth != null){
-            $row = $sth->fetchObject();
-            return $row;
+    public static function insert(string $query, array $args): ?string
+    {
+        $pdo = self::connexion();
+        if ($pdo != null) {
+            $sth = $pdo->prepare($query);
+            $sth->execute($args);
+            return $pdo->lastInsertId();
         }
         return null;
-
     }
-    public static function insert(string $query, array $args) : null|int
+
+    public static function execute(string $query, array $args): null|int
     {
-        $sth = DB::queryHander($query,$args);
-        if($sth != null){
+        $sth = DB::queryHandler($query, $args);
+        if ($sth != null) {
             return $sth->rowCount();
         }
         return null;
-    }
-    public static function execute(string $query, array $args) : null|int
-    {
-        $sth = DB::queryHander($query,$args);
-        if($sth != null){
-            return $sth->rowCount();
-        }
-        return null;
-
-
     }
 
 }

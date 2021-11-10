@@ -1,6 +1,7 @@
 <?php
 
 require_once "model/Team.php";
+require_once "model/Member.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +12,7 @@ class TeamTest extends TestCase
      */
     public function testAll()
     {
-        $this->assertEquals(15,count(Team::all()));
+        $this->assertEquals(15, count(Team::all()));
     }
 
     /**
@@ -19,7 +20,7 @@ class TeamTest extends TestCase
      */
     public function testFind()
     {
-        $this->assertInstanceOf(Team::class,Team::find(1));
+        $this->assertInstanceOf(Team::class, Team::find(1));
         $this->assertNull(Team::find(1000));
     }
 
@@ -44,7 +45,7 @@ class TeamTest extends TestCase
         $savename = $team->name;
         $team->name = "newname";
         $this->assertTrue($team->save());
-        $this->assertEquals("newname",Team::find(1)->name);
+        $this->assertEquals("newname", Team::find(1)->name);
         $team->name = $savename;
         $team->save();
     }
@@ -92,8 +93,8 @@ class TeamTest extends TestCase
      */
     public function testTeams()
     {
-        $this->assertEquals(1,count(Member::find(3)->teams()));
-        $this->assertEquals(0,count(Member::find(9)->teams()));
-        $this->assertEquals(3,count(Member::find(10)->teams()));
+        $this->assertEquals(1, count(Member::find(3)->teams()));
+        $this->assertEquals(0, count(Member::find(9)->teams()));
+        $this->assertEquals(3, count(Member::find(10)->teams()));
     }
 }

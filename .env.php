@@ -1,7 +1,7 @@
 <?php
 
-define('PDO_DSN', "localhost");
-define('PDO_USERNAME', "test");
-define('PDO_PASSWORD', "");
-define('PDO_DB', "teambuilder");
-define('USER_ID', 7);
+const PDO_DSN = "localhost";
+const PDO_USERNAME = "test";
+const PDO_PASSWORD = "";
+const PDO_DB = "teambuilder";
+const USER_ID = 11;

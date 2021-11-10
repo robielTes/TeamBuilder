@@ -5,53 +5,48 @@ require_once 'model/DB.php';
 class Team
 {
 
-    public $id;
-    public $name;
-    public $state_id;
+    public int $id;
+    public string $name;
+    public string $state_id;
 
-    public function __construct($id = null, $name = null, $state_id = null)
+    public function __construct(array $args = [])
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->state_id = $state_id;
+
+        if ($args !== []) {
+            $this->name = $args['name'];
+            $this->state_id = $args['state_id'];
+        }
     }
 
-    static public function make($fields): Team
+    public static function make(array $fields = null): Team
     {
-        if (is_array($fields)) {
-            $res = DB::selectMany("SELECT id FROM `teams` order by id desc limit 1", []);
-            return new Team($res[0]->id, $fields['name'], $fields['state_id']);
-        }
-        return new Team($fields->id, $fields->name, $fields->state_id);
+        return new Team($fields);
     }
 
     public function create(): bool
     {
         try {
             if (isset($this->name) && isset($this->state_id)) {
-                DB::insert('INSERT INTO `teams` (name,state_id) VALUES (:name,:state_id)',
-                    ["name" => $this->name, "state_id" => $this->state_id]);
+                $lastInsertId = DB::insert('INSERT INTO `teams` (name,state_id) VALUES (:name,:state_id)', ["name" => $this->name, "state_id" => $this->state_id]);
+                $this->id = $lastInsertId;
                 return true;
             }
         } catch (PDOException $e) {
-            //echo $e->getMessage();
-            return false;
+//            echo $e->getMessage();
         }
+        return false;
 
     }
 
-    static public function find($id): null|Team
+    public static function find($id): null|Team
     {
-        $select = DB::selectOne("SELECT * FROM `teams` where id = :id", ["id" => $id]);
-        if ($select != null) {
-            return self::make($select);
-        }
-        return null;
+
+        return DB::selectOne("SELECT * FROM `teams` where id = :id", ["id" => $id], Team::class);
     }
 
-    static public function all(): array
+    public static function all(): bool|array|null
     {
-        return $res = DB::selectMany("SELECT * FROM `teams`", []);
+        return DB::selectMany("SELECT * FROM `teams`", [], Team::class);
     }
 
     public function save(): bool
@@ -73,9 +68,9 @@ class Team
                 return true;
             }
         } catch (\PDOException $e) {
-            //echo $e->getMessage();
-            return false;
+//            echo $e->getMessage();
         }
+        return false;
     }
 
     public function delete(): bool
@@ -83,15 +78,15 @@ class Team
         return self::destroy($this->id);
     }
 
-    static public function destroy($id): bool
+    public static function destroy($id): bool
     {
         try {
             DB::execute(' DELETE FROM `teams` WHERE id = :id', ["id" => $id]);
             return true;
         } catch (\PDOException $e) {
-            //echo $e->getMessage();
-            return false;
+//            echo $e->getMessage();
         }
+        return false;
     }
 
 

@@ -5,92 +5,84 @@ require_once 'model/DB.php';
 class Role
 {
 
-    public $id;
-    public $slug;
-    public $name;
+    public int $id;
+    public string $slug;
+    public string $name;
 
-    public function __construct($id = null, $slug = null, $name = null)
+    public function __construct(array $args = [])
     {
-        $this->id = $id;
-        $this->slug = $slug;
-        $this->name = $name;
-    }
-
-    static public function make($fields) :Role
-    {
-        if (is_array($fields)){
-            $res = DB::selectMany("SELECT id FROM `roles` order by id desc limit 1", []);
-            return new Role($res[0]->id,$fields['slug'], $fields['name']);
+        if ($args !== []) {
+            $this->slug = $args['slug'];
+            $this->name = $args['name'];
         }
-        return new Role($fields->id,$fields->slug, $fields->name);
     }
 
-    public function create() :bool
+    public static function make(array $fields = null): Role
+    {
+        return new Role($fields);
+    }
+
+    public function create(): bool
     {
         try {
             if (isset($this->slug) && isset($this->name)) {
-                DB::insert('INSERT INTO `roles` (slug,name) VALUES (:slug,:name)',
-                    ["slug" => $this->slug, "name" => $this->name]);
+                $lastInsertId = DB::insert('INSERT INTO `roles` (slug,name) VALUES (:slug,:name)', ["slug" => $this->slug, "name" => $this->name]);
+                $this->id = $lastInsertId;
                 return true;
             }
-        } catch (PDOException $e){
-             //echo $e->getMessage();
-            return false;
+        } catch (PDOException $e) {
+            //echo $e->getMessage();
         }
-
+        return false;
     }
 
-    static public function find($id): null|Role
+    public static function find($id): null|Role
     {
-        $select = DB::selectOne("SELECT * FROM `roles` where id = :id", ["id" => $id]);
-        if($select != null){
-            return self::make($select);
-        }
-        return null;
+        return DB::selectOne("SELECT * FROM `roles` where id = :id", ["id" => $id], Role::class);
     }
 
-    static public function all():array
+    public static function all(): bool|array|null
     {
-        return $res = DB::selectMany("SELECT * FROM `roles`", []);
+        return DB::selectMany("SELECT * FROM `roles`", [], Role::class);
     }
 
-    public function save():bool
+    public function save(): bool
     {
         try {
-            if($this->id != null){
+            if ($this->id != null) {
                 $sql = "UPDATE `roles` SET ";
-                if($this->slug != null){
+                if ($this->slug != null) {
                     $sql .= " `slug` = :slug,";
                 }
-                if($this->name != null){
+                if ($this->name != null) {
                     $sql .= " `name` = :name,";
                 }
-                $sql = substr($sql,0,-1);
+                $sql = substr($sql, 0, -1);
                 $sql .= " WHERE id = :id;";
 
-                $res = DB::execute( $sql,
+                $res = DB::execute($sql,
                     ["id" => $this->id, "slug" => $this->slug, "name" => $this->name]);
                 return true;
             }
         } catch (\PDOException $e) {
             //echo $e->getMessage();
-            return false;
         }
+        return false;
     }
 
-    public function delete():bool
+    public function delete(): bool
     {
         return self::destroy($this->id);
     }
 
-    static public function destroy($id):bool
+    public static function destroy($id): bool
     {
         try {
             DB::execute(' DELETE FROM `roles` WHERE id = :id', ["id" => $id]);
             return true;
         } catch (\PDOException $e) {
-            //echo $e->getMessage();
-            return false;
+//            echo $e->getMessage();
         }
+        return false;
     }
 }

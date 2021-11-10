@@ -1,6 +1,6 @@
 <?php
 
-require_once "model/Role.php";
+require "model/Role.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +11,7 @@ class RoleTest extends TestCase
      */
     public function testAll()
     {
-        $this->assertEquals(2,count(Role::all()));
+        $this->assertEquals(2, count(Role::all()));
     }
 
     /**
@@ -19,7 +19,7 @@ class RoleTest extends TestCase
      */
     public function testFind()
     {
-        $this->assertInstanceOf(Role::class,Role::find(1));
+        $this->assertInstanceOf(Role::class, Role::find(1));
         $this->assertNull(Role::find(1000));
     }
 
@@ -44,7 +44,7 @@ class RoleTest extends TestCase
         $savename = $role->name;
         $role->name = "newname";
         $this->assertTrue($role->save());
-        $this->assertEquals("newname",Role::find(1)->name);
+        $this->assertEquals("newname", Role::find(1)->name);
         $role->name = $savename;
         $role->save();
     }

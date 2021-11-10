@@ -1,6 +1,6 @@
 <?php
 
-require_once "model/Member.php";
+require "model/Member.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -87,7 +87,7 @@ class MemberTest extends TestCase
     public function testDestroy()
     {
         $this->assertFalse(Member::destroy(1)); // expected to fail because of foreign key
-        $member = Member::make(["name" => "dummy","password" => "dummy", "role_id" => 1]);
+        $member = Member::make(["name" => "dummy", "password" => "dummy", "role_id" => 1]);
         $member->create(); // to get an id from the db
         $id = $member->id;
         $this->assertTrue(Member::destroy($id)); // expected to succeed
