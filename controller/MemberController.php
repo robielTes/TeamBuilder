@@ -7,7 +7,7 @@ class MemberController
     public function index()
     {
         $user = Member::find(USER_ID);
-        $members = Member::all();
+        $members = Member::orderBy();
         require_once 'view/MemberList.php';
     }
 

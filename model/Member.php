@@ -100,12 +100,18 @@ class Member
 
     }
 
+    public static function orderBy()
+    {
+        return DB::selectMany("SELECT * FROM `members`  ORDER BY name", [], Member::class);
+    }
+
+
     public function teams()
     {
-        return $res = DB::selectMany("SELECT `teams`.* FROM `members`
-                                     INNER JOIN `team_member` ON `team_member`.member_id = `members`.id 
-                                     INNER JOIN `teams` ON `teams`.id = team_member.team_id
-                                     WHERE `members`.id = :id ", ["id" => $this->id]);
+        return DB::selectMany("SELECT `teams`.* FROM `members`
+             INNER JOIN `team_member` ON `team_member`.member_id = `members`.id 
+             INNER JOIN `teams` ON `teams`.id = team_member.team_id
+             WHERE `members`.id = :id ", ["id" => $this->id],Team::class);
 
     }
 

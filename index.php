@@ -5,8 +5,8 @@ require_once 'controller/Authentication.php';
 require_once 'controller/HomeController.php';
 require_once 'controller/MemberController.php';
 
-$Home = new HomeController();
-$Member = new MemberController();
+$home = new HomeController();
+$member = new MemberController();
 
 $auth = new Authentication();
 $_SESSION['user'] = $auth->getUser();
@@ -16,9 +16,9 @@ if (isset($_GET['controller'])) {
 }
 switch ($action){
     case "listMember":
-        $Member->index();
+        $member->index();
         break;
     default:
-        $Home->index();
+        $home->index();
         break;
 }
