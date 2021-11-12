@@ -17,4 +17,17 @@ class MemberController
         require_once 'view/memberTeams.php';
     }
 
+
+    public function memberEdit(int $id)
+    {
+
+        $profile = Member::find($id);
+        $states =$profile->state();
+        $role = $profile->role()[0];
+       if($role->name === 'Member'){
+           require_once 'view/editMember.php';
+       }elseif($role->name === 'Moderator'){
+           require_once 'view/editModerator.php';
+       }
+    }
 }

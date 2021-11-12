@@ -62,3 +62,14 @@
     - Créez un lien vers la méthode member dans le contrôleur d'accueil lorsque vous cliquez sur le nom de l'utilisateur connecté.
     - Créez la méthode role & state dans la classe memeber pour obtenir l'état et le rôle de l'utilisateur.
     - Passez les données de l'utilisateur clique à la vue profile.php et montrez-les à l'utilisateur.
+
+## Modification de profil
+
+    DoD
+        Dans la page de consultation de profil, un bouton permet le basculement en mode édition
+        Un utilisateur standard ne peut éditer que son nom dans son profil
+        Si le nouveau nom existe déjà, le changement est rejeté avec le message 'Nom déjà existant'
+        Un modérateur ne peut modifier que le rôle et le status
+        Après enregistrement réussi de modifications, un message me confimre le succès et je me retrouvesur la page de consultation avec les nouvelles valeurs
+
+//Todo finir le formulaire d'édition des modérateurs et des membres

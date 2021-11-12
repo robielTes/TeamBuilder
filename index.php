@@ -36,6 +36,9 @@ switch ($action){
     case "member":
         $home->member($id);
         break;
+    case "editMember":
+        $member->memberEdit($id);
+        break;
     default:
         $home->index();
         break;

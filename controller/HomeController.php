@@ -11,16 +11,17 @@ class HomeController
     public function profil()
     {
         $profile = Member::find(USER_ID);
-        $states =$profile->state();
-        $roles = $profile->role();
+        $state =$profile->state()[0];
+        $role = $profile->role()[0];
         require_once 'view/profil.php';
     }
 
     public function member(int $id)
     {
+
         $profile = Member::find($id);
-        $states =$profile->state();
-        $roles = $profile->role();
+        $state =$profile->state()[0];
+        $role = $profile->role()[0];
         require_once 'view/profil.php';
     }
 

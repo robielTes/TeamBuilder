@@ -1,35 +1,15 @@
 <?php
 ob_start()
 ?>
+
+    <div class="flex py-4 -mx-10 ">
+        <a class="bg-green-800 hover:bg-green-600 text-white font-bold py-3 px-4 rounded mx-4" href="?action=editMember&id=<?=$profile->id?>"">Edit</a>
+    </div>
+
 <p> Nom : <?= ($profile->name)?></p>
-    <table>
-        <tr>
-        <td class="border-4 border-light-gray-500">role</td>
-        </tr>
-        <?php foreach ($roles as $role): ?>
-            <tr>
-                <td class="border-4 border-light-gray-500"><?= $role->name ?></td>
-            </tr>
-        <?php
-        endforeach ?>
-    </table>
+<p> Role : <?= ($role->name)?></p>
+<p> State : <?= ($state->name )?></p>
 <br>
-    <br>
-
-    <table>
-        <tr>
-        <td class="border-4 border-light-gray-500">status</td>
-        </tr>
-        <?php foreach ($states as $state): ?>
-
-            <tr>
-                <td class="border-4 border-light-gray-500"><?= $state->name ?></td>
-            </tr>
-        <?php
-        endforeach ?>
-    </table>
-    <br>
-    <br>
 
 <?php if (!empty($profile->teams())): ?>
     <table class="table-fixed border-4 border-light-blue-500">
