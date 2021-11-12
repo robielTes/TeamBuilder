@@ -13,9 +13,12 @@ $team = new TeamController();
 $auth = new Authentication();
 $_SESSION['user'] = $auth->getUser();
 
-
+$id = 1;
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
+}
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
 }
 switch ($action){
     case "listMember":
@@ -29,6 +32,9 @@ switch ($action){
         break;
     case "profil":
         $home->profil();
+        break;
+    case "member":
+        $home->member($id);
         break;
     default:
         $home->index();

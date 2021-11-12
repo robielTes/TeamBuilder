@@ -16,4 +16,13 @@ class HomeController
         require_once 'view/profil.php';
     }
 
+    public function member(int $id)
+    {
+        $profile = Member::find($id);
+        $states =$profile->state();
+        $roles = $profile->role();
+        require_once 'view/profil.php';
+    }
+
+
 }

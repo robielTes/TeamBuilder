@@ -5,8 +5,8 @@ ob_start()
         <?php if (!empty($members)): ?>
             <?php foreach ($members as $member): ?>
                 <tr>
-                    <td>
-                        <?= $member->name ?>
+                    <td class="hover:bg-gray-200">
+                       <a href="?action=member&id=<?=$member->id?>"> <?= $member->name ?></a>
                     </td>
                     <td>
                         <?php foreach ($member->teams() as $team): ?>

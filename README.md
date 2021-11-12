@@ -49,6 +49,16 @@
             "Membre de: ..." (pareil. De plus, on ne retrouve pas ici d'équipe dont l'utilisateur est capitaine)
         Si l'utilisateur n'est dans aucune équipe, la page affiche "Inscrit dans aucune équipe"
 
-    - Créez un lien vers la méthode profil dans le contrôleur d'accueil lorsque vous cliquez sur le nom de l'utilisateur.
+    - Créez un lien vers la méthode profil dans le contrôleur d'accueil lorsque vous cliquez sur le nom de l'utilisateur connecté.
     - Créez la méthode role & state dans la classe memeber pour obtenir l'état et le rôle de l'utilisateur.
-    - Passez les données à la vue profile.php et montrez-les à l'utilisateur.
+    - Passez les données de l'utilisateur conneté à la vue profile.php et montrez-les à l'utilisateur.
+
+## Consultation d'un profil
+
+    DoD
+        Je clique sur le nom d'un utilisateur dans la liste des membre, cela m'amène à la page de profil de cetutilisateur (telle que décrite ci-dessus)
+        L'interface utilisateur ne permet pas à un utilisateur standard de consulter le profil d'un autre utilisateur
+
+    - Créez un lien vers la méthode member dans le contrôleur d'accueil lorsque vous cliquez sur le nom de l'utilisateur connecté.
+    - Créez la méthode role & state dans la classe memeber pour obtenir l'état et le rôle de l'utilisateur.
+    - Passez les données de l'utilisateur clique à la vue profile.php et montrez-les à l'utilisateur.
