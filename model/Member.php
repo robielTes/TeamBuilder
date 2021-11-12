@@ -2,6 +2,8 @@
 
 require_once 'model/DB.php';
 require_once 'model/Team.php';
+require_once 'model/State.php';
+require_once 'model/Role.php';
 
 class Member
 {
@@ -112,6 +114,26 @@ class Member
              INNER JOIN `team_member` ON `team_member`.member_id = `members`.id 
              INNER JOIN `teams` ON `teams`.id = team_member.team_id
              WHERE `members`.id = :id ", ["id" => $this->id],Team::class);
+
+    }
+
+    public function role()
+    {
+        return DB::selectMany("SELECT `roles`.name FROM `members`
+            INNER JOIN `roles` on `teambuilder`.roles.id = role_id
+             WHERE `members`.id = :id ", ["id" => $this->id],Role::class);
+
+    }
+    public function state()
+    {
+        return DB::selectMany("SELECT `states`.name FROM `members`
+                INNER JOIN `team_member` on member_id = `members`.id
+                INNER JOIN `teams` on team_id = `teams`.id
+                INNER JOIN `states` on state_id = `states`.id
+                WHERE `members`.id = :id ", ["id" => $this->id],State::class);
+
+
+
 
     }
 

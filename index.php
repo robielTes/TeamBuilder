@@ -27,6 +27,9 @@ switch ($action){
     case "myTeam":
         $team->team();
         break;
+    case "profil":
+        $home->profil();
+        break;
     default:
         $home->index();
         break;
