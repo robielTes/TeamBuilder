@@ -4,11 +4,17 @@ require_once 'model/Member.php';
 
 class MemberController
 {
-    public function index()
+    public function memberList()
     {
         $user = Member::find(USER_ID);
-        $members = Member::all();
-        require_once 'view/MemberList.php';
+        $members = Member::orderBy();
+        require_once 'view/memberList.php';
+    }
+    public function memberTeams()
+    {
+        $user = Member::find(USER_ID);
+        $teams = $user->teams();
+        require_once 'view/memberTeams.php';
     }
 
 }
