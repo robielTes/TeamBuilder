@@ -11,9 +11,12 @@
 <body>
 <header class="bg-green-400 p-6">
     <h1 class="text-6xl font-bold text-center">TeamBuilder</h1>
-    <p class="text-right -mb-3 text-xl"><?=$_SESSION['user']->name?></p>
+    <p class="text-right -mb-3 text-xl">Vous êtes connecté en tant que : <strong><?=$_SESSION['user']->name?></strong></p>
 </header>
-<br><a class="bg-green-800 hover:bg-green-600 text-white font-bold py-3 px-4 rounded mx-4" href="?controller=listMember">MemberList</a>
+<div class="flex pt-4">
+    <a class="bg-green-800 hover:bg-green-600 text-white font-bold py-3 px-4 rounded mx-4" href="?action=listMember">MemberList</a>
+    <a class="bg-green-800 hover:bg-green-600 text-white font-bold py-3 px-4 rounded mx-4" href="?action=listTeam">Mes équipes</a>
+</div>
 
 <div class="mx-10 my-6">
     <?= $content ?>
